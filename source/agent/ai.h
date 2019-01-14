@@ -1,6 +1,15 @@
 /*
+ * This header defines the Ai and Policy classes
  *
+ * The Ai class is a generic parent class for ai
+ * non-specific to games. It handles storing the
+ * options and updating their weight by rewards,
+ * and selecting a new move given a game state
  *
+ * The Policy class is really just a helper for
+ * the Ai class, wrapping the concept of what
+ * the policy options should look like for a 
+ * given game state.
  *
  */
 
@@ -41,11 +50,9 @@ class Ai {
   private:
 
     // Move score matrix: Total score for every move => [0, N) 
-    // Policy* mScoresMatrix;
     std::map<int, Policy> mScoresMatrix;
 
     // Move tries matrix: Total tries for every move => [0, N)
-    // Policy* mTriesMatrix;
     std::map<int, Policy> mTriesMatrix;
 
     // Total size of the modeled game matrix

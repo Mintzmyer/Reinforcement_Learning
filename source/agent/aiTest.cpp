@@ -1,4 +1,4 @@
-/*
+/* Test cases for Ai and Policy classes
  *
  *
  *
@@ -15,8 +15,23 @@
 #include "../../catch2/catch.hpp"
 #include "ai.h"
 
-TEST_CASE( "Policy class: Testing constructor" ) {
+TEST_CASE( "Policy class: Testing parameterized constructor" ) {
+
     Policy aPolicy(9);
-    REQUIRE( aPolicy.updatePolicyMatrix(2, 0.0) == 0);
+
+    for (int i=0; i<9; i++) {
+        REQUIRE( aPolicy.updatePolicyMatrix(i, (float)(9-i)) == 0 );
+        REQUIRE( aPolicy.getValueAtOption(i) == (float)(9-i) );
+    }
+
+    REQUIRE( aPolicy.updatePolicyMatrix(9, 0.0) == -1);
+    REQUIRE( aPolicy.updatePolicyMatrix(-1, 0.0) == -1);
+
+    for (int i=0; i<9; i++) {
+        REQUIRE( aPolicy.getValueAtOption(i) == (float)(9-i) );
+    }
+
+    REQUIRE( aPolicy.getValueAtOption(9) == 0.0 );
+    REQUIRE( aPolicy.getValueAtOption(-1) == 0.0 );
 }
 

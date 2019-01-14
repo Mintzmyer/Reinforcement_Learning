@@ -1,28 +1,41 @@
 /*
+ * This source implements the Ai and Policy classes
  *
+ * The Ai class is a generic parent class for ai
+ * non-specific to games. It handles storing the
+ * options and updating their weight by rewards,
+ * and selecting a new move given a game state
  *
+ * The Policy class is really just a helper for
+ * the Ai class, wrapping the concept of what
+ * the policy options should look like for a 
+ * given game state.
  *
  */
 
+
 #include "ai.h"
-//#include <map>
 
 
 // The policy class encapsulating the policy matrices
 
 // Default Constructor - overwrite this in child classes for other games
 Policy::Policy()  {
-    mPolicyMatrix = new float[9];
-    mBoardSize = 9;
+    Policy(9);
 }
+
+// Parameterized constructor
 Policy::Policy(int gameboardSize)  {
     mPolicyMatrix = new float[gameboardSize];
     mBoardSize = gameboardSize;
+    for (int i = 0; i < mBoardSize; i++) {
+        mPolicyMatrix[i] = (float)0.0;
+    }
 }
 
 // Update the policy matrix with new reinforcement
 int Policy::updatePolicyMatrix(int option, float value) {
-    if (option < mBoardSize) {
+    if ((0 <= option) && (option < mBoardSize)) {
         mPolicyMatrix[option] += value;
         return 0;
     } else {
@@ -37,9 +50,10 @@ float* Policy::getPolicyMatrix() {
 
 // Return the current value of the ith option of the policy matrix
 float Policy::getValueAtOption(int option) {
-    if (option < mBoardSize) {
+    if ((0 <= option) && (option < mBoardSize)) {
         return mPolicyMatrix[option];
     } else {
+        // To avoid throwing a null, return 0
         return 0.0;
     }
 }
@@ -51,11 +65,6 @@ float Policy::getValueAtOption(int option) {
 Ai::Ai(int totMatrixSize, int gameboardSize) {
     mMatrixSize = totMatrixSize;
     mBoardSize = gameboardSize;
-    Policy template1(mBoardSize); // = new Policy(mBoardSize);
-    //std::map<int, Policy> test1;
-    //test1.insert ( std::pair<int, Policy>(23,template1) );
-    //mScoresMatrix = template[totMatrixSize];
-    //mTriesMatrix  = new Policy(gameboardSize)[totMatrixSize];
 }
 
 
@@ -63,6 +72,7 @@ Ai::Ai(int totMatrixSize, int gameboardSize) {
 Policy Ai::getStateMatrix(int state) {
     Policy nextMoveMatrix(mBoardSize);
 
+    // Verify policy matrix already exists
     if (state < mMatrixSize) {
         float score, tries;
 
