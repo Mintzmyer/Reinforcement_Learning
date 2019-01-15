@@ -15,23 +15,69 @@
 #include "../../catch2/catch.hpp"
 #include "ai.h"
 
-TEST_CASE( "Policy class: Testing parameterized constructor" ) {
+Policy defaultPolicy;
 
-    Policy aPolicy(9);
+TEST_CASE( "Policy class: Testing default constructor" ) {
 
-    for (int i=0; i<9; i++) {
-        REQUIRE( aPolicy.updatePolicyMatrix(i, (float)(9-i)) == 0 );
-        REQUIRE( aPolicy.getValueAtOption(i) == (float)(9-i) );
+    int size = defaultPolicy.getBoardSize();
+
+    for (int i=0; i<size; i++) {
+        REQUIRE( defaultPolicy.updatePolicyMatrix(i, (float)(size-i)) == 0 );
+        REQUIRE( defaultPolicy.getValueAtOption(i) == (float)(size-i) );
     }
 
-    REQUIRE( aPolicy.updatePolicyMatrix(9, 0.0) == -1);
-    REQUIRE( aPolicy.updatePolicyMatrix(-1, 0.0) == -1);
+    REQUIRE( defaultPolicy.updatePolicyMatrix(size, 0.0) == -1);
+    REQUIRE( defaultPolicy.updatePolicyMatrix(-1, 0.0) == -1);
 
-    for (int i=0; i<9; i++) {
-        REQUIRE( aPolicy.getValueAtOption(i) == (float)(9-i) );
+    for (int i=0; i<size; i++) {
+        REQUIRE( defaultPolicy.getValueAtOption(i) == (float)(size-i) );
     }
 
-    REQUIRE( aPolicy.getValueAtOption(9) == 0.0 );
-    REQUIRE( aPolicy.getValueAtOption(-1) == 0.0 );
+    REQUIRE( defaultPolicy.getValueAtOption(size) == 0.0 );
+    REQUIRE( defaultPolicy.getValueAtOption(-1) == 0.0 );
+
+    for (int i=0; i<size; i++) {
+        REQUIRE( defaultPolicy.updatePolicyMatrix(i, (float)(i)) == 0 );
+        REQUIRE( defaultPolicy.getValueAtOption(i) == (float)9.0 );
+    }
+
 }
 
+
+Policy aPolicy(16);
+
+TEST_CASE( "Policy class: Testing parameterized constructor" ) {
+
+    int size = aPolicy.getBoardSize();
+
+    for (int i=0; i<size; i++) {
+        REQUIRE( aPolicy.updatePolicyMatrix(i, (float)(size-i)) == 0 );
+        REQUIRE( aPolicy.getValueAtOption(i) == (float)(size-i) );
+    }
+
+    REQUIRE( aPolicy.updatePolicyMatrix(size, 0.0) == -1);
+    REQUIRE( aPolicy.updatePolicyMatrix(-1, 0.0) == -1);
+
+    for (int i=0; i<size; i++) {
+        REQUIRE( aPolicy.getValueAtOption(i) == (float)(size-i) );
+    }
+
+    REQUIRE( aPolicy.getValueAtOption(size) == 0.0 );
+    REQUIRE( aPolicy.getValueAtOption(-1) == 0.0 );
+
+    for (int i=0; i<size; i++) {
+        REQUIRE( aPolicy.updatePolicyMatrix(i, (float)(i)) == 0 );
+        REQUIRE( aPolicy.getValueAtOption(i) == (float)size );
+    }
+
+}
+
+/*
+TEST_CASE( "Policy class: Return the current policy matrix") {
+    int size = aPolicy.getBoardSize();
+    float * aMatrix = aPolicy.getPolicyMatrix();
+    for (int i = 0; i < size; i++) {
+        REQUIRE( *(aMatrix+(i*(sizeof(float)))) == (float)size );
+    }
+}
+*/

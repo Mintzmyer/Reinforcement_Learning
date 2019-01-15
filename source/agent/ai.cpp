@@ -33,6 +33,11 @@ Policy::Policy(int gameboardSize)  {
     }
 }
 
+// Return mBoardSize
+int Policy::getBoardSize() {
+    return mBoardSize;
+}
+
 // Update the policy matrix with new reinforcement
 int Policy::updatePolicyMatrix(int option, float value) {
     if ((0 <= option) && (option < mBoardSize)) {

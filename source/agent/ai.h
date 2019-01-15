@@ -34,6 +34,9 @@ class Policy {
     Policy();
     Policy(int gameboardSize);
 
+    // Get private member variable mBoardSize
+    int getBoardSize();
+
     // Update the policy matrix with new reinforcement
     int updatePolicyMatrix(int option, float value);
 
