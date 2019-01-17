@@ -21,7 +21,12 @@
 
 // Default Constructor - overwrite this in child classes for other games
 Policy::Policy()  {
-    Policy(9);
+    mPolicyMatrix = new float[9];
+    mBoardSize = 9;
+    for (int i = 0; i < mBoardSize; i++) {
+        mPolicyMatrix[i] = (float)0.0;
+    }
+    //Policy(9);
 }
 
 // Parameterized constructor

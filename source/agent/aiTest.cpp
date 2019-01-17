@@ -15,60 +15,66 @@
 #include "../../catch2/catch.hpp"
 #include "ai.h"
 
+// Tests the updatePolicyMatrix() and getValueAtOption()
+//     functions for each valid index of the matrix
+void updateAndGetValue(Policy anyPolicy, float newValue) {
+    int size = anyPolicy.getBoardSize();
+
+    for (int i=0; i<size; i++) {
+        float startingValue = anyPolicy.getValueAtOption(i);
+        REQUIRE( anyPolicy.updatePolicyMatrix(i, (float)(newValue-i)) == 0.0 );
+        REQUIRE( anyPolicy.getValueAtOption(i) == (float)(newValue-i)+startingValue );
+    }
+}
+
+// Tests some invalid indices near the matrix with functions
+//     updatePolicyMatrix() and getValueAtOption()
+void invalidUpdateAndGetValue(Policy anyPolicy, float newValue) {
+    int size = anyPolicy.getBoardSize();
+    int invalidBelow, invalidAbove;
+
+    for (int i=0; i<size; i++) {
+        invalidBelow = ((-1)*i)-1;  // [0, size-1] > [-size, -1] below valid range
+        invalidAbove = (i+size);    // [0, size-1] < [size, 2*size] above valid range
+
+        // Returns 0.0 when index invalid
+        REQUIRE( anyPolicy.getValueAtOption(invalidBelow) == (float)0.0 );
+        REQUIRE( anyPolicy.getValueAtOption(invalidAbove) == (float)0.0 );
+
+        // Returns -1.0 when update invalid
+        REQUIRE( anyPolicy.updatePolicyMatrix(invalidBelow, (float)(newValue-i)) == (float)-1.0 );
+        REQUIRE( anyPolicy.updatePolicyMatrix(invalidAbove, (float)(newValue-i)) == (float)-1.0 );
+
+        // Returns 0.0 when index invalid
+        REQUIRE( anyPolicy.getValueAtOption(invalidBelow) == (float)0.0 );
+        REQUIRE( anyPolicy.getValueAtOption(invalidAbove) == (float)0.0 );
+    }
+}
+
 Policy defaultPolicy;
 
 TEST_CASE( "Policy class: Testing default constructor" ) {
-
     int size = defaultPolicy.getBoardSize();
+    REQUIRE(size > 0);
 
-    for (int i=0; i<size; i++) {
-        REQUIRE( defaultPolicy.updatePolicyMatrix(i, (float)(size-i)) == 0 );
-        REQUIRE( defaultPolicy.getValueAtOption(i) == (float)(size-i) );
-    }
+    updateAndGetValue(defaultPolicy, 5.0);
+    invalidUpdateAndGetValue(defaultPolicy, 4.0);
 
-    REQUIRE( defaultPolicy.updatePolicyMatrix(size, 0.0) == -1);
-    REQUIRE( defaultPolicy.updatePolicyMatrix(-1, 0.0) == -1);
-
-    for (int i=0; i<size; i++) {
-        REQUIRE( defaultPolicy.getValueAtOption(i) == (float)(size-i) );
-    }
-
-    REQUIRE( defaultPolicy.getValueAtOption(size) == 0.0 );
-    REQUIRE( defaultPolicy.getValueAtOption(-1) == 0.0 );
-
-    for (int i=0; i<size; i++) {
-        REQUIRE( defaultPolicy.updatePolicyMatrix(i, (float)(i)) == 0 );
-        REQUIRE( defaultPolicy.getValueAtOption(i) == (float)9.0 );
-    }
+    updateAndGetValue(defaultPolicy, -3.14);
+    invalidUpdateAndGetValue(defaultPolicy, -6.02);
 
 }
 
 
-Policy aPolicy(16);
+Policy a16Policy(16);
 
 TEST_CASE( "Policy class: Testing parameterized constructor" ) {
 
-    int size = aPolicy.getBoardSize();
+    updateAndGetValue(a16Policy, 5.0);
+    invalidUpdateAndGetValue(a16Policy, 4.0);
 
-    for (int i=0; i<size; i++) {
-        REQUIRE( aPolicy.updatePolicyMatrix(i, (float)(size-i)) == 0 );
-        REQUIRE( aPolicy.getValueAtOption(i) == (float)(size-i) );
-    }
-
-    REQUIRE( aPolicy.updatePolicyMatrix(size, 0.0) == -1);
-    REQUIRE( aPolicy.updatePolicyMatrix(-1, 0.0) == -1);
-
-    for (int i=0; i<size; i++) {
-        REQUIRE( aPolicy.getValueAtOption(i) == (float)(size-i) );
-    }
-
-    REQUIRE( aPolicy.getValueAtOption(size) == 0.0 );
-    REQUIRE( aPolicy.getValueAtOption(-1) == 0.0 );
-
-    for (int i=0; i<size; i++) {
-        REQUIRE( aPolicy.updatePolicyMatrix(i, (float)(i)) == 0 );
-        REQUIRE( aPolicy.getValueAtOption(i) == (float)size );
-    }
+    updateAndGetValue(a16Policy, -3.14);
+    invalidUpdateAndGetValue(a16Policy, -6.02);
 
 }
 
