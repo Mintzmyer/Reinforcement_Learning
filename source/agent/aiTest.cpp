@@ -4,9 +4,6 @@
  *
  */
 
-// g++ -std=c++11 -Wall -o 010-TestCase 010-TestCase.cpp && ./010-TestCase --success
-// g++ -std=c++11 -Wall -I ../catch/ -o 010-TestCase 010-TestCase.cpp && ./010-TestCase --success
-
 
 // aiTest.cpp
 
@@ -15,10 +12,14 @@
 #include "../../catch2/catch.hpp"
 #include "ai.h"
 
-// Tests the updatePolicyMatrix() and getValueAtOption()
+// Tests the Policy::updatePolicyMatrix() and Policy::getValueAtOption()
 //     functions for each valid index of the matrix
 void updateAndGetValue(Policy anyPolicy, float newValue) {
+    INFO(" Policy::updateAndGetValue test function: ");
     int size = anyPolicy.getBoardSize();
+
+    // Verify the for-loop runs at least once, to avoid silent failures
+    REQUIRE ( size > 0 );
 
     for (int i=0; i<size; i++) {
         float startingValue = anyPolicy.getValueAtOption(i);
@@ -28,10 +29,14 @@ void updateAndGetValue(Policy anyPolicy, float newValue) {
 }
 
 // Tests some invalid indices near the matrix with functions
-//     updatePolicyMatrix() and getValueAtOption()
+//     Policy::updatePolicyMatrix() and Policy::getValueAtOption()
 void invalidUpdateAndGetValue(Policy anyPolicy, float newValue) {
+    INFO(" Policy::invalidUpdateAndGetValue test function: ");
     int size = anyPolicy.getBoardSize();
     int invalidBelow, invalidAbove;
+
+    // Verify the for-loop runs at least once, to avoid silent failures
+    REQUIRE ( size > 0 );
 
     for (int i=0; i<size; i++) {
         invalidBelow = ((-1)*i)-1;  // [0, size-1] > [-size, -1] below valid range
@@ -48,6 +53,29 @@ void invalidUpdateAndGetValue(Policy anyPolicy, float newValue) {
         // Returns 0.0 when index invalid
         REQUIRE( anyPolicy.getValueAtOption(invalidBelow) == (float)0.0 );
         REQUIRE( anyPolicy.getValueAtOption(invalidAbove) == (float)0.0 );
+    }
+}
+
+// Tests the Policy::getPolicyMatrix() function, and verifies the
+//     array matches values returned by Policy::getValueAtOption()
+void verifyGetPolicyMatrix(Policy anyPolicy) {
+    INFO(" Policy::verifyGetPolicyMatrix test function: ");
+    int size = anyPolicy.getBoardSize();
+    float ithValue, totValue;
+    float * aMatrix = anyPolicy.getPolicyMatrix();
+
+    // Verify the for-loop runs at least once, to avoid silent failures
+    REQUIRE ( size > 0 );
+
+    totValue = 0.0;
+    for (int i = 0; i < size; i++) {
+        ithValue = anyPolicy.getValueAtOption(i);
+        REQUIRE( (float)*(aMatrix+(i)) == ithValue );
+        totValue += ithValue;
+    }
+
+    if (totValue == 0.0) {
+        WARN("ALERT: Total value is zero, could indicate matrix is uninitialized");
     }
 }
 
@@ -78,12 +106,13 @@ TEST_CASE( "Policy class: Testing parameterized constructor" ) {
 
 }
 
-/*
-TEST_CASE( "Policy class: Return the current policy matrix") {
-    int size = aPolicy.getBoardSize();
-    float * aMatrix = aPolicy.getPolicyMatrix();
-    for (int i = 0; i < size; i++) {
-        REQUIRE( *(aMatrix+(i*(sizeof(float)))) == (float)size );
+
+TEST_CASE( "Policy class: Return the current policy matrix with getPolicyMatrix()") {
+    SECTION( " Default policy: Verify matrix values are accurate" ) {
+        verifyGetPolicyMatrix(defaultPolicy);
+    }
+    SECTION( " Paramterized policy: Verify matrix values are accurate" ) {
+        verifyGetPolicyMatrix(a16Policy);
     }
 }
-*/
+
