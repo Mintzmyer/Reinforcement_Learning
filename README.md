@@ -1,5 +1,6 @@
-# Reinforcement_Learning_TicTacToe
+# Reinforcement_Learning
 Exploring 'Reinforcement Learning' via Tic Tac Toe implementation
+and hopefully, other games and variations.
 
 ### Learning to teach a machine to learn
 I'm excited and curious about various machine learning techniques.
