@@ -72,49 +72,67 @@ float Policy::getValueAtOption(int option) {
 // The AI class encapsulating the AI logic and functionality
 
 // Constructor
-Ai::Ai(int totMatrixSize, int gameboardSize) {
-    mMatrixSize = totMatrixSize;
+Ai::Ai(int gameboardSize) {
     mBoardSize = gameboardSize;
 }
 
+// Helper function for testing getStateScore() function math
+float Ai::getStateValue(int state) {
+    float score;
+    score = mScoresMatrix.at(state);
+    return score;
+}
+
+// Helper function for testing getStateScore() function math
+float Ai::getStateTries(int state) {
+    float tries;
+    tries = mTriesMatrix.at(state);
+    return tries;
+}
 
 // Function to fetch state score: Total score/Total games => [-1, 1]
-Policy Ai::getStateMatrix(int state) {
-    Policy nextMoveMatrix(mBoardSize);
+float Ai::getStateScore(int state) {
+    float score, tries;
+    score = mScoresMatrix.at(state);
+    tries = mTriesMatrix.at(state);
 
-    // Verify policy matrix already exists
-    if (state < mMatrixSize) {
-        float score, tries;
-
-        for (int i=0; i < mBoardSize; i++){
-            score = mScoresMatrix[state].getValueAtOption(i);
-            tries = mTriesMatrix[state].getValueAtOption(i);
-            if (tries == 0.0 || score == 0.0) {
-                nextMoveMatrix.updatePolicyMatrix(i, (float) 0.0);
-            } else {
-                nextMoveMatrix.updatePolicyMatrix(i, (float)(score/tries) );
-            }
-        }
-    } else {
-        for (int i=0; i < mBoardSize; i++){
-            nextMoveMatrix.updatePolicyMatrix(i, (float) 0.0);
-        }
+    if ((score == 0.0) || (tries == 0.0)) {
+        return 0.0;
     }
-    return nextMoveMatrix;
+    return (score/tries);
 }
 
 // Function to select a move: Random vs Greedy => [0, 1]
 int Ai::getMove(Policy stateMatrix, float exploration) {
+// NOT IMPLEMENTED YET
     return 0;
 }
 
-int Ai::rewardPolicy(int state, int move, float value) {
-    if (state < mMatrixSize) {
-        mScoresMatrix[state].updatePolicyMatrix(move, value);
-        mTriesMatrix[state].updatePolicyMatrix(move, 1.0);
-        return 0;
+int Ai::updateReward(int state, float value) {
+    float score, tries;
+
+    std::map<int, float>::iterator itScore, itTries;
+    itScore = mScoresMatrix.find(state); 
+    itTries = mTriesMatrix.find(state); 
+
+    if (itTries != mTriesMatrix.end()) {
+        tries = itTries->second;
+
+        tries += 1.0;
+
+        itTries->second = tries;
     } else {
-        return -1;
+        mTriesMatrix.insert ( std::pair<int,float>(state,score) );    
+    }
+
+    if (itScore != mScoresMatrix.end()) {
+        score = itScore->second;
+
+        score += value;
+
+        itScore->second = score;
+    } else {
+        mScoresMatrix.insert ( std::pair<int,float>(state,score) );    
     }
 }
 

@@ -52,11 +52,11 @@ class Ai {
 
   private:
 
-    // Move score matrix: Total score for every move => [0, N) 
-    std::map<int, Policy> mScoresMatrix;
+    // State score matrix: Total score for every state => [0, N) 
+    std::map<int, float> mScoresMatrix;
 
-    // Move tries matrix: Total tries for every move => [0, N)
-    std::map<int, Policy> mTriesMatrix;
+    // State tries matrix: Total tries for every state => [0, N)
+    std::map<int, float> mTriesMatrix;
 
     // Total size of the modeled game matrix
     int mMatrixSize;
@@ -67,16 +67,18 @@ class Ai {
   public:
 
     // Constructor
-    Ai(int matrixSize, int gameboardSize);
+    Ai(int gameboardSize);
 
+    float getStateValue(int state);
+    float getStateTries(int state);
     // Function to fetch state score: Total score/Total games => [-1, 1]
-    Policy getStateMatrix(int state);
+    float getStateScore(int state);
 
     // Function to select a move: Greedy vs Random => [0, 1]
     int getMove(Policy stateMatrix, float exploration);
 
     // Function to calculate and distribute reward
-    int rewardPolicy(int state, int move, float value);
+    int updateReward(int state, float value);
 };
 
 #endif

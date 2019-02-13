@@ -9,8 +9,12 @@
 
 // main() provided by Catch in file ../../catch2/mainTestCase.cpp.
 
+#include <stdlib.h>
+#include <time.h>
 #include "../../catch2/catch.hpp"
 #include "ai.h"
+
+// ----------------    Policy class    ----------------
 
 // Tests the Policy::updatePolicyMatrix() and Policy::getValueAtOption()
 //     functions for each valid index of the matrix
@@ -96,6 +100,7 @@ TEST_CASE( "Policy class: Testing default constructor" ) {
 
 Policy a16Policy(16);
 
+
 TEST_CASE( "Policy class: Testing parameterized constructor" ) {
 
     updateAndGetValue(a16Policy, 5.0);
@@ -116,3 +121,49 @@ TEST_CASE( "Policy class: Return the current policy matrix with getPolicyMatrix(
     }
 }
 
+// ----------------    Ai class    ----------------
+
+
+// Tests the Ai::updateReward() and Ai::getStateScore()
+//     functions for a variety of board states
+void updateAndGetScore(Ai anyAi, float newValue) {
+    srand(time(NULL));
+    INFO(" Ai::updateReward test function: ");
+    int size = 64;
+
+    // Verify the for-loop runs at least once, to avoid silent failures
+    REQUIRE ( size > 0 );
+    float startingScore, stateValue, stateTries;
+
+    for (int i=0; i<size; i++) {
+        int randState = rand() % 1000;
+
+        // Randomly get -1, 0, or +1
+        int randReward = rand() % 3 -1;
+        startingScore = anyAi.getStateScore(randState);
+        stateValue = anyAi.getStateValue(randState);
+        stateTries = anyAi.getStateTries(randState);
+        if (stateTries == 0.0 || stateValue == 0.0) {
+            REQUIRE( startingScore == 0.0 );
+        } else {
+            REQUIRE( startingScore == stateValue/stateTries );
+        }
+
+        REQUIRE( anyAi.updateReward(randState, (float)randReward) == 0.0);
+
+        stateValue = anyAi.getStateValue(randState);
+        stateTries = anyAi.getStateTries(randState);
+        
+        REQUIRE( anyAi.getStateScore(randState) == (stateValue/stateTries) );
+    }
+}
+
+
+Ai a9Ai(9);
+Ai a16Ai(16);
+
+TEST_CASE( "Ai class: Testing constructor" ) {
+    
+
+
+}
