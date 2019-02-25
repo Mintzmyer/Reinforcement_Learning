@@ -126,9 +126,9 @@ TEST_CASE( "Policy class: Return the current policy matrix with getPolicyMatrix(
 
 // Tests the Ai::updateReward() and Ai::getStateScore()
 //     functions for a variety of board states
-void updateAndGetScore(Ai anyAi, float newValue) {
+void updateAndGetScore(Ai anyAi) {
     srand(time(NULL));
-    INFO(" Ai::updateReward test function: ");
+    INFO(" Ai::updateAndGetScore test function: ");
     int size = 64;
 
     // Verify the for-loop runs at least once, to avoid silent failures
@@ -149,7 +149,7 @@ void updateAndGetScore(Ai anyAi, float newValue) {
             REQUIRE( startingScore == stateValue/stateTries );
         }
 
-        REQUIRE( anyAi.updateReward(randState, (float)randReward) == 0.0);
+        REQUIRE( anyAi.updateReward(randState, (float)randReward) == 0);
 
         stateValue = anyAi.getStateValue(randState);
         stateTries = anyAi.getStateTries(randState);
@@ -163,7 +163,14 @@ Ai a9Ai(9);
 Ai a16Ai(16);
 
 TEST_CASE( "Ai class: Testing constructor" ) {
+
     
+    SECTION( " A 9 AI: Verify updateReward() and getStateScore()" ) {
+        updateAndGetScore(a9Ai);
+    }
+    SECTION( " A 16 AI: Verify updateReward() and getStateScore()" ) {
+        updateAndGetScore(a16Ai);
+    }
 
 
 }

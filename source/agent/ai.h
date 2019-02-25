@@ -69,8 +69,12 @@ class Ai {
     // Constructor
     Ai(int gameboardSize);
 
+    // TEST function to fetch value of state
     float getStateValue(int state);
+
+    // TEST function to fetch value of tries
     float getStateTries(int state);
+
     // Function to fetch state score: Total score/Total games => [-1, 1]
     float getStateScore(int state);
 

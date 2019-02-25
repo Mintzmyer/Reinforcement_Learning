@@ -79,22 +79,22 @@ Ai::Ai(int gameboardSize) {
 // Helper function for testing getStateScore() function math
 float Ai::getStateValue(int state) {
     float score;
-    score = mScoresMatrix.at(state);
+    score = mScoresMatrix[state];
     return score;
 }
 
 // Helper function for testing getStateScore() function math
 float Ai::getStateTries(int state) {
     float tries;
-    tries = mTriesMatrix.at(state);
+    tries = mTriesMatrix[state];
     return tries;
 }
 
 // Function to fetch state score: Total score/Total games => [-1, 1]
 float Ai::getStateScore(int state) {
     float score, tries;
-    score = mScoresMatrix.at(state);
-    tries = mTriesMatrix.at(state);
+    score = mScoresMatrix[state];
+    tries = mTriesMatrix[state];
 
     if ((score == 0.0) || (tries == 0.0)) {
         return 0.0;
@@ -134,6 +134,8 @@ int Ai::updateReward(int state, float value) {
     } else {
         mScoresMatrix.insert ( std::pair<int,float>(state,score) );    
     }
+
+    return 0;
 }
 
 
