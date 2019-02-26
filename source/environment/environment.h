@@ -5,7 +5,11 @@
  *
  */
 
-using namespace std;
+#ifndef ENVIRONMENT_H
+#define ENVIRONMENT_H
+
+#include <map>
+#include <stddef.h>
 
 // Representation of a move, no game-specific logic
 class Move {
@@ -13,12 +17,12 @@ class Move {
   private:
 
     // Old position and value to update it to (ie now vacant)
-    int oldPos;
-    char oldPosValue;
+    int mOldPos;
+    char mOldPosValue;
 
     // New position and value to update it to (ie now occupied)
-    int newPos;
-    char newPosValue;
+    int mNewPos;
+    char mNewPosValue;
 
   public:
 
@@ -35,9 +39,9 @@ class Move {
     // Function to get new position
     int getNewPos();
     // Function to get new position's value
-    int getNewPosVal();
+    char getNewPosVal();
 
-}
+};
 
 // Representation of game board, no game-specific logic
 class Board {
@@ -61,7 +65,7 @@ class Board {
     // Function to get board state
     std::map<int, char> getBoardState();
 
-}
+};
 
 // Handles game-specific logic like valid moves and win conditions
 // Updates Board class using Move class
@@ -70,10 +74,10 @@ class Environment {
   private:
 
     // Game board
-    Board gameBoard;
+    Board mGameBoard;
 
     // Array of game history, for n players the (i%n - 1)th index is nth player's move
-    Board* gameState
+    Board* mGameState;
 
     // Function to check if move is valid
     int isMoveValid(Move checkMove);
@@ -94,5 +98,6 @@ class Environment {
 
     // Function to get all possible move options
     Move* getAllMoves();
-}
+};
 
+#endif
