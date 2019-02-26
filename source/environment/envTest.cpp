@@ -112,9 +112,37 @@ void createAndUpdateBoard() {
     }
 }
 
+void populateAndGetBoardState() {
+    INFO(" Test function for getBoardState() ");
+
+    int size = 188;
+
+    // Verify the for-loop runs at least once, to avoid silent failures
+    REQUIRE ( size > 0 );
+
+    Board aBoard;
+    char value;
+
+    for (int i=0; i<size; i++) {
+        value = '!' + i%94;
+        aBoard.updateBoard(i, value);
+    }
+
+    std::map<int, char> boardState = aBoard.getBoardState();
+
+    for (int i=0; i<size; i++) {
+        value = '!' + i%94;
+        REQUIRE ( boardState[i] == value );
+    }
+    
+
+}
+
 TEST_CASE( "Board class: Testing updateBoard() and getBoardStateAt()" ) {
     createAndUpdateBoard();
 }
 
-
+TEST_CASE( "Board class: Testing getBoardState()" ) {
+    populateAndGetBoardState();
+}
 

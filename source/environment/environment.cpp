@@ -55,4 +55,7 @@ char Board::getBoardStateAt(int position) {
     return mBoardMap[position];
 }
 
-
+// Funtion to get complete board state
+std::map<int, char> Board::getBoardState() {
+    return mBoardMap;
+}
