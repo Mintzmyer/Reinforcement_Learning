@@ -18,7 +18,7 @@
 
 // Tests the Move constructor and getter functions
 void createAndCheckValue() {
-    INFO(" Move test function: ");
+    INFO(" Move test function:");
     srand(time(NULL));
 
     int size = 64;
@@ -31,8 +31,9 @@ void createAndCheckValue() {
     for (int i=0; i<size; i++) {
         oldPos = rand() % 1000;
         newPos = rand() % 1000;
-        oldPosVal = 'a' + rand()%26;
-        newPosVal = 'a' + rand()%26;
+        // Randomly get any symbol, a-z, A-Z, punctuation etc
+        oldPosVal = '!' + rand()%94;
+        newPosVal = '!' + rand()%94;
 
         Move aMove(oldPos, oldPosVal, newPos, newPosVal);
 
@@ -44,16 +45,15 @@ void createAndCheckValue() {
     }
 
     for (int i=0; i<size; i++) {
-        oldPos = NULL;
-        oldPosVal = NULL;
         newPos = rand() % 1000;
-        newPosVal = 'a' + rand()%26;
+        // Randomly get any symbol, a-z, A-Z, punctuation etc
+        newPosVal = '!' + rand()%94;
 
         Move aMove(newPos, newPosVal);
 
         // Verify the values match the getter function returns
-        REQUIRE ( aMove.getOldPos() == oldPos );
-        REQUIRE ( aMove.getOldPosVal() == oldPosVal );
+        REQUIRE ( aMove.getOldPos() == NULL );
+        REQUIRE ( aMove.getOldPosVal() == NULL );
         REQUIRE ( aMove.getNewPos() == newPos );
         REQUIRE ( aMove.getNewPosVal() == newPosVal );
     }
