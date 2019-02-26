@@ -6,7 +6,7 @@
 
 #include "environment.h"
 
-// The move class encapsulates information about updating a board state
+// The Move class encapsulates information about updating a board state
 
 // Constructor
 Move::Move(int oldPos, char oldPosValue, int newPos, char newPosValue) {
@@ -41,5 +41,18 @@ char Move::getNewPosVal() {
     return mNewPosValue;
 }
 
+
+// The Board class encapsulates information about the board state, pieces etc
+
+// Function to update board state with new move
+int Board::updateBoard(int position, char newValue) {
+    mBoardMap[position] = newValue;
+    return 0;
+}
+
+// Function to get state of a particular board position
+char Board::getBoardStateAt(int position) {
+    return mBoardMap[position];
+}
 
 

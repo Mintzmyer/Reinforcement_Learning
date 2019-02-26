@@ -17,6 +17,35 @@
 // ----------------    Move class    ----------------
 
 // Tests the Move constructor and getter functions
+
+Move getRandMove4Param() {
+    int oldPos, newPos;
+    char oldPosVal, newPosVal;
+
+    oldPos = rand() % 1000;
+    newPos = rand() % 1000;
+    // Randomly get any symbol, a-z, A-Z, punctuation etc
+    oldPosVal = '!' + rand()%94;
+    newPosVal = '!' + rand()%94;
+
+    Move rMove(newPos, newPosVal);
+    return rMove;
+}
+
+Move getRandMove2Param() {
+    int newPos;
+    char newPosVal;
+
+    newPos = rand() % 1000;
+    // Randomly get any symbol, a-z, A-Z, punctuation etc
+    newPosVal = '!' + rand()%94;
+
+    Move rMove(newPos, newPosVal);
+    return rMove;
+}
+
+
+
 void createAndCheckValue() {
     INFO(" Move test function:");
     srand(time(NULL));
@@ -62,4 +91,30 @@ void createAndCheckValue() {
 TEST_CASE( "Move class: Testing all constructors" ) {
     createAndCheckValue();
 }
+
+
+// ----------------    Board class    ----------------
+
+void createAndUpdateBoard() {
+    INFO(" Board test function:");
+
+    int size = 64;
+
+    // Verify the for-loop runs at least once, to avoid silent failures
+    REQUIRE ( size > 0 );
+
+    Board aBoard;
+
+    for (int i=0; i<size; i++) {
+        Move aMove = getRandMove2Param();
+        REQUIRE ( aBoard.updateBoard(aMove.getNewPos(), aMove.getNewPosVal()) == 0 );
+        REQUIRE ( aBoard.getBoardStateAt(aMove.getNewPos()) == aMove.getNewPosVal() );
+    }
+}
+
+TEST_CASE( "Board class: Testing updateBoard() and getBoardStateAt()" ) {
+    createAndUpdateBoard();
+}
+
+
 

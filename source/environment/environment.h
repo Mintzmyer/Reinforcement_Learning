@@ -53,9 +53,6 @@ class Board {
 
   public:
 
-    // Constructor
-    Board(int boardWidth, int boardHeight);
-
     // Function to update board state with new move
     int updateBoard(int position, char newValue);
 
