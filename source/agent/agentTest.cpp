@@ -136,7 +136,7 @@ void updateAndGetScore(Ai anyAi) {
     float startingScore, stateValue, stateTries;
 
     for (int i=0; i<size; i++) {
-        int randState = rand() % 1000;
+        int randState = rand() % 10;
 
         // Randomly get -1, 0, or +1
         int randReward = rand() % 3 -1;
