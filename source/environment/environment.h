@@ -16,6 +16,9 @@ class Move {
 
   private:
 
+    // Bool value to track if Move has 4 (or 2) params, either 0 (false) or 1 (true)
+    int m4Params;
+
     // Old position and value to update it to (ie now vacant)
     int mOldPos;
     char mOldPosValue;
@@ -31,6 +34,9 @@ class Move {
 
     // Constructor to set new game piece down
     Move(int newPos, char newPosValue);
+
+    // Function to check if Move has 4 params (or 2 params)
+    int is4Params();
 
     // Function to get old position
     int getOldPos();
@@ -84,9 +90,6 @@ class Environment {
 
   public:
 
-    // Constructor
-    Environment(int boardWidth, int boardHeight);
-
     // Function to update board state with new move
     int setNextMove(Move newMove);
 
@@ -95,6 +98,9 @@ class Environment {
 
     // Function to get all possible move options
     Move* getAllMoves();
+
+    // Helper function to get Game board for testing
+    Board getGameBoard();
 };
 
 #endif

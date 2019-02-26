@@ -67,6 +67,7 @@ void createAndCheckValue() {
         Move aMove(oldPos, oldPosVal, newPos, newPosVal);
 
         // Verify the values match the getter function returns
+        REQUIRE ( aMove.is4Params() == 1 );
         REQUIRE ( aMove.getOldPos() == oldPos );
         REQUIRE ( aMove.getOldPosVal() == oldPosVal );
         REQUIRE ( aMove.getNewPos() == newPos );
@@ -81,6 +82,7 @@ void createAndCheckValue() {
         Move aMove(newPos, newPosVal);
 
         // Verify the values match the getter function returns
+        REQUIRE ( aMove.is4Params() == 0 );
         REQUIRE ( aMove.getOldPos() == NULL );
         REQUIRE ( aMove.getOldPosVal() == NULL );
         REQUIRE ( aMove.getNewPos() == newPos );
@@ -146,3 +148,38 @@ TEST_CASE( "Board class: Testing getBoardState()" ) {
     populateAndGetBoardState();
 }
 
+
+// ----------------    Environment class    ----------------
+
+void setMoveViaEnvironment() {
+    INFO(" Test function for Environment::setNextMove() ");
+
+    int size = 64;
+
+    // Verify the for-loop runs at least once, to avoid silent failures
+    REQUIRE ( size > 0 );
+
+    Environment aEnvironment;
+    Board aBoard;
+
+    for (int i = 0; i<size; i++) {
+        Move aMove = getRandMove4Param();
+        REQUIRE( aEnvironment.setNextMove(aMove) == 0 );
+        aBoard = aEnvironment.getGameBoard();
+        REQUIRE( aBoard.getBoardStateAt(aMove.getOldPos()) == aMove.getOldPosVal() );
+        REQUIRE( aBoard.getBoardStateAt(aMove.getNewPos()) == aMove.getNewPosVal() );
+    }
+
+    for (int i = 0; i<size; i++) {
+        Move aMove = getRandMove2Param();
+        REQUIRE( aEnvironment.setNextMove(aMove) == 0 );
+        aBoard = aEnvironment.getGameBoard();
+        REQUIRE( aBoard.getBoardStateAt(aMove.getNewPos()) == aMove.getNewPosVal() );
+
+    }
+
+}
+
+TEST_CASE( "Environment class: Testing setNextMove() " ) {
+    setMoveViaEnvironment();
+}
