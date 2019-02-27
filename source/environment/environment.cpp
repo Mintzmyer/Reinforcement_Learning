@@ -81,6 +81,18 @@ Board Environment::getGameBoard() {
     return mGameBoard;
 }
 
+// Function to check if a board is won, tied, lost or in progress
+// Won = 1, Tied = 0, Lost = -1, Unresolved = -2
+int Environment::isGameOver(Board aBoard) {
+    return -2; // Implement on per-game basis
+}
+
+// Function to check if current board reached end-game
+// or still in progress
+int Environment::isGameOver() {
+    return isGameOver(mGameBoard);
+}
+
 // Function to update board state with new move
 int Environment::setNextMove(Move newMove) {
     if (isMoveValid(newMove)) {

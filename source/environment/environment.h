@@ -82,13 +82,16 @@ class Environment {
     // Array of game history, for n players the (i%n - 1)th index is nth player's move
     Board* mGameState;
 
+  public:
+
     // Function to check if move is valid
     int isMoveValid(Move checkMove);
 
     // Function to check for win condition
-    int isGameOver();
+    int isGameOver(Board aBoard);
 
-  public:
+    // Function to check for win condition
+    int isGameOver();
 
     // Function to update board state with new move
     int setNextMove(Move newMove);

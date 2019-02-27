@@ -125,6 +125,7 @@ void populateAndGetBoardState() {
     Board aBoard;
     char value;
 
+    // Fill the game board with predictable content
     for (int i=0; i<size; i++) {
         value = '!' + i%94;
         aBoard.updateBoard(i, value);
@@ -132,6 +133,7 @@ void populateAndGetBoardState() {
 
     std::map<int, char> boardState = aBoard.getBoardState();
 
+    // Verify game board matches content
     for (int i=0; i<size; i++) {
         value = '!' + i%94;
         REQUIRE ( boardState[i] == value );
@@ -177,9 +179,26 @@ void setMoveViaEnvironment() {
         REQUIRE( aBoard.getBoardStateAt(aMove.getNewPos()) == aMove.getNewPosVal() );
 
     }
-
 }
+
 
 TEST_CASE( "Environment class: Testing setNextMove() " ) {
     setMoveViaEnvironment();
+}
+
+void checkEndGameState() {
+    INFO(" Verify generic Environment's isGameOver() returns -2 ")
+    // This is a bit contrived, so I'll be brief
+    // Testing this fn is much much more relevant
+    // when overwritten for a specific game
+
+    Board someBoard;
+    Environment someEnvironment;
+
+    REQUIRE( someEnvironment.isGameOver() == -2 );
+    REQUIRE( someEnvironment.isGameOver(someBoard) == -2 );
+}
+
+TEST_CASE( "Environment class: Testing isGameOver() ") {
+    checkEndGameState();
 }
