@@ -1,7 +1,7 @@
 /* Test cases for Ai and Policy classes
- *
- *
- *
+ * 
+ * This file contains unit tests for the functionality
+ * implemented in the Ai and Policy classes
  */
 
 
